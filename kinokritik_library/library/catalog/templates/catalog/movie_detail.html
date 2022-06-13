@@ -1,0 +1,61 @@
+{%extends "base_generic.html"%}
+{% load templatetag %}
+{% block content %}
+<div class="movie_detail">
+    <div class="movie_info">
+        <div class="poster">
+            <img src="{{movie.poster_url}}" alt="img">
+        </div>
+        <div class="info">
+            <h2>{{movie.name}}</h2>
+            <p>&#171;{{movie.slogan}}&#187;</p>
+            <p>Время: {{movie.film_length}}</p>
+            <p>Возраст: {{movie.age_limit}}</p>
+            {% get_rating_by_id movie.id as rating %}
+            <p>Рейтинг: {% get_rating_by_id movie.id %}</p>
+            <span>Жанры: </span>
+            {% for genre in movie.genre.all %}
+            <span>{{genre.name}}</span>
+            {% endfor %}
+            <p></p>
+            <span>{{movie.description}}</span>
+        </div>
+    </div>
+    <div class="rating">
+        {% if user.is_authenticated %}
+        <form method="post" action="">
+            {% csrf_token %}
+            <p>Выставить рейтинг{{rating_form}}</p>
+            <input type="submit" class="btn btn-primary" value="Выставить">
+        </form>
+        {% else %}
+        <p>Войдите в систему что бы поставить рейтинг</p>
+        {% endif %}
+    </div>
+
+    <div class="comment">
+        <hr>
+        {% if user.is_authenticated %}
+        <form action="" id="comment_create_form" method="post">
+            {% csrf_token %}
+            {{comment_form.as_p}}
+            <input class="btn btn-primary" form="comment_create_form" type="submit" value="Добавить">
+        </form>
+        {% else %}
+        <p>Войдите в систему что бы оставить отзыв</p>
+        {% endif %}
+        <hr>
+        {% for comment in movie.comments_movies.all %}
+        {% if comment.moderation_status %}
+        <div>
+            <span class="username">{{comment.user.username}}:</span>
+            <span class="comment_date"> {{comment.comment_date}}</span>
+        </div>
+        <div class="comment_text">
+            <p>{{comment.comment_text}}</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

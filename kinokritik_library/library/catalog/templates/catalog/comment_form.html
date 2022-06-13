@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="comment_update">
+    <form action="" id="comment_update_form" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input class="btn btn-primary" form="comment_update_form" type="submit" value="Изменить">
+    </form>
+</div>
+{% endblock %}

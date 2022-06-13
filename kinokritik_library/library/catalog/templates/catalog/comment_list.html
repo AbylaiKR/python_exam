@@ -1,0 +1,38 @@
+{%extends "base_generic.html"%}
+{% block content %}
+{% if comment_list %}
+<div class="user_comment">
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Кино</th>
+            <th scope="col">Коментраий</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Статус</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comment in comment_list %}
+        <tr>
+            <td><a href="{% url 'movie_detail' comment.movie.pk %}" style="color: white; font-size: 20px">{{comment.movie}}</a></td>
+            <td>{{comment.comment_text}}</td>
+            <td>{{comment.comment_date}}</td>
+            {% if comment.moderation_status %}
+            <td>Опубликован</td>
+            {% else %}
+            <td>В обработке</td>
+            {% endif %}
+            <td><a href="{% url 'comment_delete' comment.pk %}" style="color: red;">Удалить</a></td>
+            <td><a href="{% url 'comment_update' comment.pk %}" style="color: dodgerblue">Изменить</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% else %}
+<p>No comments</p>
+{% endif %}
+{% endblock %}
